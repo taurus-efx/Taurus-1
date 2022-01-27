@@ -1,43 +1,40 @@
 /* Copyright (C) 2020 Yusuf Usta.
-
 Licensed under the  GPL-3.0 License;
 you may not use this file except in compliance with the License.
-
 WhatsAsena - Yusuf Usta
 */
-const fs = require("fs")
-const path = require("path")
-const { handleMessages } = require("./Utilis/msg")
-const chalk = require("chalk")
-const { DataTypes } = require("sequelize")
-const config = require("./config")
-const { WAConnection, MessageType } = require("@adiwajshing/baileys")
-const { StringSession } = require("./Utilis/whatsasena")
-const { getJson } = require("./Utilis/download")
-const { customMessageScheduler } = require("./Utilis/schedule")
-const { prepareGreetingMedia } = require("./Utilis/greetings")
-const { groupMuteSchuler, groupUnmuteSchuler } = require("./Utilis/groupmute")
-const { PluginDB } = require("./plugins/sql/plugin")
+
+const fs = require("fs");
+const path = require("path");
+const events = require("./events");
+const chalk = require('chalk');
+const config = require('./config');
+const {WAConnection, MessageOptions, MessageType, Mimetype, Presence} = require('@adiwajshing/baileys');
+const {Message, StringSession, Image, Video} = require('./julie/');
+const { DataTypes } = require('sequelize');
+const { getMessage } = require("./plugins/sql/greetings");
+const axios = require('axios');
+const got = require('got');
 
 // Sql
-const got = require("got")
-const { startMessage, waWebVersion } = require("./Utilis/Misc")
-const WhatsAsenaDB = config.DATABASE.define("WhatsAsena", {
-  info: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  value: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-})
+const WhatsAsenaDB = config.DATABASE.define('WhatsAsena', {
+    info: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    value: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    }
+});
 
-fs.readdirSync("./plugins/sql/").forEach((plugin) => {
-  if (path.extname(plugin).toLowerCase() == ".js") {
-    require("./plugins/sql/" + plugin)
-  }
-})
+fs.readdirSync('./plugins/sql/').forEach(plugin => {
+    if(path.extname(plugin).toLowerCase() == '.js') {
+        require('./plugins/sql/' + plugin);
+    }
+});
+
+const plugindb = require('./plugins/sql/plugin');
 
 // Yalnızca bir kolaylık. https://stackoverflow.com/questions/4974238/javascript-equivalent-of-pythons-format-function //
 String.prototype.format = function () {
