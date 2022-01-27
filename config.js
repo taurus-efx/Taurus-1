@@ -67,6 +67,7 @@ module.exports = {
     TAURUS_AI: process.env.TAURUS_AI === undefined ? 'false' : process.env.TAURUS_AI,
     ALIVEBUTTON: process.env.ALIVEBUTTON === undefined ? 'ʜᴇʟʟᴏ ʙʀᴏ' : process.env.ALIVEBUTTON,
     ALIVE_BUTTON: process.env.ALIVE_BUTTON === undefined ? 'ʜɪ ᴅᴜᴅᴇ' : process.env.ALIVE_BUTTON,
+    STICKER_PACKNAME: process.env.STICKER_PACKNAME === undefined ? 'TAURUS,BOT' : process.env.STICKER_PACKNAME,
     LG_LOGO: process.env.LG_LOGO === undefined ? 'https://bit.ly/3cwa8fv' : process.env.LG_LOGO,
     LOGO_NAME: process.env.LOGO_NAME === undefined ? 'ꪶ͢ɪͥᴛͭsᷤ ͢ᴍͫᴇͤᡃᴛᴀᴜʀᴜs࿐' : process.env.LOGO_NAME,
     BRANCH: 'master',
