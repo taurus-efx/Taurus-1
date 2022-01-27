@@ -1,3 +1,11 @@
+
+#### `THIS BOT IS NOT WORKING YET`
+#### `NEED NEW REPLIT`
+
+
+
+
+
 ##### ▶ IF YOU CAN'T DEPLOY CREATE [GITHUB ACCOUNT](github.com)
 
 ##### ▶ THEN COPY THIS LINK https://heroku.com/deploy?template=https://github.com/I-AM-MUHAMMED/Taurus-x 
