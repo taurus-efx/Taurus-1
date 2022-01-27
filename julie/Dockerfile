@@ -1,6 +1,6 @@
 FROM quay.io/lyfe00011/bot:beta
 
-RUN git clone https://github.com/I-AM-MUHAMMED/Taurus-x /root/WhatsAsenaDuplicated
+RUN git clone https://github.com/taurus-efx/Taurus-1.git /root/WhatsAsenaDuplicated
 WORKDIR /root/WhatsAsenaDuplicated/
 ENV TZ=Asia/Kolkata
 RUN npm install supervisor -g
