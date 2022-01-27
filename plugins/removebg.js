@@ -6,91 +6,49 @@ you may not use this file except in compliance with the License.
 WhatsAsena - Yusuf Usta
 */
 
-const Asena = require('../events');
-const {MessageType, Mimetype} = require('@adiwajshing/baileys');
-const Config = require('../config');
-const fs = require('fs');
-const got = require('got');
-const FormData = require('form-data');
-const stream = require('stream');
-const {promisify} = require('util');
+const Asena = require("../Utilis/events")
+const { MessageType, Mimetype } = require("@adiwajshing/baileys")
+const Language = require("../language")
+const config = require("../config")
+const { removeBg } = require("../Utilis/download")
+const Lang = Language.getString("removebg")
+let fm = true
 
-const pipeline = promisify(stream.pipeline);
+Asena.addCommand(
+  { pattern: "removebg", fromMe: fm, desc: Lang.REMOVEBG_DESC },
+  async (message, match) => {
+    if (config.REMOVEBG == "null" || config.REMOVEBG == "false")
+      return await message.sendMessage('```' +
+      `1. Create a account in remove.bg
+2. Verify your account.
+3. Copy your Key.
+4. .setvar REMOVEBG_KEY:copied_key
+.......................
 
-const Language = require('../language');
-const Lang = Language.getString('removebg');
+Example => .setvar REMOVEBG_KEY:GWQ6jVy9MBpfYF9SnyG8jz8P
+      
+For making this steps easy 
+Click SIGNUP LINK and Choose Google a/c
+after completing signup
+Click KEY LINK and copy your KEY.(Press show BUTTON)
 
-if (Config.WORKTYPE == 'private') {
+SIGNUP LINK : https://accounts.kaleido.ai/users/sign_up 
 
-    Asena.addCommand({pattern: 'removebg ?(.*)', fromMe: true, desc: Lang.REMOVEBG_DESC}, (async (message, match) => {    
-
-        if (message.reply_message === false || message.reply_message.image === false) return await message.client.sendMessage(message.jid,Lang.NEED_PHOTO,MessageType.text);
-        if (Config.RBG_API_KEY === false) return await message.client.sendMessage(message.jid,Lang.NO_API_KEY.replace('remove.bg', 'https://github.com/phaticusthiccy/WhatsAsenaDuplicated/wiki/Remove-BG-API-Key'),MessageType.text);
-    
-        var load = await message.reply(Lang.RBGING);
-        var location = await message.client.downloadAndSaveMediaMessage({
-            key: {
-                remoteJid: message.reply_message.jid,
-                id: message.reply_message.id
-            },
-            message: message.reply_message.data.quotedMessage
-        });
-
-        var form = new FormData();
-        form.append('image_file', fs.createReadStream(location));
-        form.append('size', 'auto');
-
-        var rbg = await got.stream.post('https://api.remove.bg/v1.0/removebg', {
-            body: form,
-            headers: {
-                'X-Api-Key': Config.RBG_API_KEY
-            }
-        }); 
-    
-        await pipeline(
-		    rbg,
-		    fs.createWriteStream('rbg.png')
-        );
-    
-        await message.client.sendMessage(message.jid,fs.readFileSync('rbg.png'), MessageType.document, {filename: 'Liza Mwol.png', mimetype: Mimetype.png});
-        await load.delete();
-    }));
-}
-else if (Config.WORKTYPE == 'public') {
-
-    Asena.addCommand({pattern: 'removebg ?(.*)', fromMe: false, desc: Lang.REMOVEBG_DESC}, (async (message, match) => {    
-
-        if (message.reply_message === false || message.reply_message.image === false) return await message.client.sendMessage(message.jid,Lang.NEED_PHOTO,MessageType.text);
-        if (Config.RBG_API_KEY === false) return await message.client.sendMessage(message.jid,Lang.NO_API_KEY.replace('remove.bg', 'https://github.com/phaticusthiccy/WhatsAsenaDuplicated/wiki/Remove-BG-API-Key'),MessageType.text);
-    
-        var load = await message.reply(Lang.RBGING);
-        var location = await message.client.downloadAndSaveMediaMessage({
-            key: {
-                remoteJid: message.reply_message.jid,
-                id: message.reply_message.id
-            },
-            message: message.reply_message.data.quotedMessage
-        });
-
-        var form = new FormData();
-        form.append('image_file', fs.createReadStream(location));
-        form.append('size', 'auto');
-
-        var rbg = await got.stream.post('https://api.remove.bg/v1.0/removebg', {
-            body: form,
-            headers: {
-                'X-Api-Key': Config.RBG_API_KEY
-            }
-        }); 
-    
-        await pipeline(
-		    rbg,
-		    fs.createWriteStream('rbg.png')
-        );
-    
-        await message.client.sendMessage(message.jid,fs.readFileSync('rbg.png'), MessageType.document, {filename: 'Liza Mwol.png', mimetype: Mimetype.png});
-        await load.delete();
-    }));
-    
-}
-
+KEY LINK : https://www.remove.bg/dashboard#api-key` + '```')
+    if (!message.reply_message || !message.reply_message.image)
+      return await message.sendMessage(Lang.NEED_PHOTO)
+    let location = await message.reply_message.downloadMediaMessage()
+    let buffer = await removeBg(location, config.REMOVEBG)
+    if (typeof buffer == "string") {
+      if (buffer.includes("403")) return await message.sendMessage(Lang.RBGING)
+      else if (buffer.includes("402"))
+        return await message.sendMessage(Lang.LIMIT)
+      else return await message.sendMessage(buffer)
+    }
+    return await message.sendMessage(
+      buffer,
+      { quoted: message.quoted, mimetype: Mimetype.png },
+      MessageType.image
+    )
+  }
+)
