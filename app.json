@@ -7,7 +7,7 @@
     ],
     "stack": "container",
     "env": {
-        "TAURUS_CODE": {
+        "ASENA_SESSION": {
             "description": "Enter whatsapp web session.",
             "required": true
         },
