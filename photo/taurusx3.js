@@ -1,7 +1,7 @@
 
 Const ff {msg} edit get error (./Taurus)
-Const whatsasena (../root/whatsAsena)
-Const make new error file edited (./error)
+Const whatsasena (./root/WhatsAsena)
+Const make new error file edited (./Error)
 Conn.loadAuthInfo is not the intended use 
 
 
