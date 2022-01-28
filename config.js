@@ -18,7 +18,7 @@ DEBUG = process.env.DEBUG === undefined ? false : convertToBool(process.env.DEBU
 
 module.exports = {
     VERSION: 'v1.1.4',
-    SESSION: process.env.TAURUS_CODE === undefined ? '' : process.env.TAURUS_CODE,
+    SESSION: process.env.ASENA_SESSION === undefined ? '' : process.env.ASENA_SESSION,
     WORKTYPE: process.env.WORK_TYPE === undefined ? 'private' : process.env.WORK_TYPE,
     EXT: process.env.EXT === undefined ? undefined : process.env.EXT,
     LANG: process.env.LANGUAGE === undefined ? 'EN' : process.env.LANGUAGE.toUpperCase(),
